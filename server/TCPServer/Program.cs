@@ -23,10 +23,16 @@ class Server
         string data = Encoding.ASCII.GetString(buffer, 0, buffer.Length);
 
         Console.WriteLine("receive..." + data);
-        foreach(var client in clientList)
+        foreach(var client in clientList.ToList())
         {
+            try { 
             byte[] msg = Encoding.ASCII.GetBytes(data);
             client.Send(msg);
+            }
+            catch
+            {
+                clientList.Remove(client);
+            }
         }
     }
     public void StartListening()
